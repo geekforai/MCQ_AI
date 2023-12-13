@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>MCQ Quiz</title>
+
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    
+    <div class="container">
+        <h1>MCQ Quiz</h1>
+        <div class="quiz">
+          {% set outer_index = 0 %}
+          {% for Question in Questions %}
+          {% set outer_index = loop.index %}
+             <h2>Question {{ loop.index }}:</h2>
+             <p>{{Question[0]}}</p>
+             <ul id="{{loop.index}}">
+                {% for item in Question[2] %}
+                <li><input type="radio" name=" {{outer_index}}" value="{{item}}" required> {{item}}</li>
+                {% endfor %}
+             </ul>
+          {% endfor %}
+            
+        </div>
+        
+        <button type="submit" onclick="getResult()">Submit</button>
+    </div>
+    <script>
+        fullMArk=10
+        getmark=0
+        var ansArray=[]
+        var myArray = {{ answers | tojson }};
+        // Get all the radio buttons
+        var radioButtons = document.querySelectorAll('input[type="radio"]');
+        
+        // Attach event listener to each radio button
+        radioButtons.forEach(function(radioButton) {
+          radioButton.addEventListener('change', function(event) {
+            var selectedValue = event.target.value;
+            var questionId = event.target.closest("ul").id;
+            ansArray[questionId-1]=selectedValue
+            console.log("Selected value:", selectedValue);
+            console.log("Question ID:", questionId);
+      
+            // Perform the desired action based on the selected value and question ID
+            // You can add your custom logic here
+          });
+        });
+        function getResult(){
+            getmark=0
+             for (let index = 0; index < myArray.length; index++) {
+                if(myArray[index]==ansArray[index])
+                {
+                    getmark=getmark+1;
+                }
+                
+             }
+                var lists = document.getElementsByTagName("ul");
+                    
+                for (var i = 0; i < lists.length; i++) {
+                   try{
+                    var list = lists[i];
+                    var listItem = list.querySelector("li input:checked").parentNode;
+                    var value = list.querySelector("li input:checked").value;
+                        
+                    if (value === myArray[i]) {
+                        listItem.style.backgroundColor = "rgba(0, 255, 0, 0.2)";;
+                    } else {
+                        listItem.style.backgroundColor = "rgba(255, 0, 0, 0.2)";;
+                    } 
+                   }
+                   catch (error){
+                    alert("Please select all the questions")
+                    return
+                   }
+                }
+                var lists = document.getElementsByTagName("ul");
+
+                for (var i = 0; i < lists.length; i++) {
+                var listItems = lists[i].getElementsByTagName("li");
+
+                for (var j = 0; j < listItems.length; j++) {
+                    var listItem = listItems[j];
+                    var itemValue = listItem.textContent.trim();
+
+                    if (itemValue ===myArray[i]) {
+                        listItem.style.backgroundColor = "rgba(0, 255, 0, 0.2)";;
+                    } 
+                }
+                }
+             alert("You Scored "+getmark+" out of 10")
+        } 
+      </script>
+</body>
+</html>

@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>MCQ Quiz Generator</title>
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+  <style>
+    .container {
+      text-align: center;
+    }
+    textarea {
+      margin: 0 auto;
+      display: block;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Crossword Quiz Generator</h1>
+    <form action="/crossword" method="POST" enctype="multipart/form-data">
+      <textarea required id="text" name="text" rows="30" cols="70" placeholder="Write or paste the text here"></textarea>
+      <br>
+      <button type="submit">Generate Quiz</button>
+      <a href="/MCQ" >Go for MCQ</a>
+    </form>
+  </div>
+</body>
+</html>
